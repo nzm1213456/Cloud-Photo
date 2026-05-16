@@ -3,53 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC碰一碰图片相册</title>
+    <title>NFC碰一碰照片</title>
     <style>
-        body{max-width:1100px;margin:0 auto;padding:20px;font-family:微软雅黑;}
-        .tip{color:#666;margin:10px 0;}
-        .img-item{display:inline-block;border:1px #eee solid;padding:10px;margin:8px;border-radius:8px;}
-        .img-item img{width:220px;height:160px;object-fit:cover;}
-        .btn{background:#0095ff;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;margin:5px;}
-        .copy-btn{background:#27ae60;}
+        body{max-width:1000px;margin:20px auto;padding:0 20px;}
+        .box{display:inline-block;margin:10px;border:1px solid #ddd;padding:10px;border-radius:8px;}
+        img{width:200px;height:150px;object-fit:cover;}
+        button{margin-top:8px;padding:6px 12px;background:#007aff;color:white;border:none;border-radius:6px;cursor:pointer;}
     </style>
 </head>
 <body>
-    <h2>个人NFC照片相册</h2>
-    <p class="tip">使用方法：把图片上传到仓库images文件夹，刷新页面获取链接</p>
-    <hr>
-    <div id="list"></div>
+    <h2>我的NFC照片相册</h2>
+    <br>
+
+    <div id="imgs"></div>
 
     <script>
-        // 改成你的仓库Pages地址（注意结尾不要加斜杠）
-        const domain = "https://nzm1213456.github.io/Cloud-Photo";
-
-        // 在这里填写你上传的图片文件名
-        const imgNames = [
-            "1.jpg"
+        // ======================================
+        // 只需要在这里写你上传的图片文件名
+        // ======================================
+        const images = [
+            "1.jpg",
+            // 想加更多直接往下写，例如：
+            // "2.jpg",
+            // "3.png"
         ];
 
         let html = "";
-        imgNames.forEach(name=>{
-            let url = domain + "/images/" + name;
+        images.forEach(name => {
+            // 绝对路径，保证能显示
+            let url = "https://nzm1213456.github.io/Cloud-Photo/images/" + name;
+            
             html += `
-            <div class="img-item">
-                <img src="${url}" alt="${name}">
+            <div class="box">
+                <img src="${url}">
                 <br>
-                <button class="copy-btn" onclick="copy('${url}')">复制NFC链接</button>
+                <button onclick="copy('${url}')">复制NFC链接</button>
             </div>
-            `
-        })
-        document.getElementById("list").innerHTML = html;
+            `;
+        });
 
-        // 一键复制链接
-        function copy(text){
-            let inp = document.createElement('input');
-            inp.value = text;
-            document.body.appendChild(inp);
-            inp.select();
-            document.execCommand('copy');
-            inp.remove();
-            alert("链接复制成功！可写入NFC贴纸");
+        document.getElementById("imgs").innerHTML = html;
+
+        // 复制链接
+        function copy(url) {
+            let i = document.createElement("input");
+            i.value = url;
+            document.body.appendChild(i);
+            i.select();
+            document.execCommand("copy");
+            i.remove();
+            alert("已复制：" + url);
         }
     </script>
 </body>
