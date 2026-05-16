@@ -20,14 +20,12 @@
     <div id="list"></div>
 
     <script>
-        // 改成你的GitHub Pages域名
-        const domain = "https://nzm1213456.github.io";
+        // 改成你的仓库Pages地址（注意结尾不要加斜杠）
+        const domain = "https://nzm1213456.github.io/Cloud-Photo";
 
         // 在这里填写你上传的图片文件名
         const imgNames = [
-            "1.jpg",
-            "2.jpg",
-            "3.png"
+            "1.jpg"
         ];
 
         let html = "";
@@ -35,7 +33,7 @@
             let url = domain + "/images/" + name;
             html += `
             <div class="img-item">
-                <img src="${url}">
+                <img src="${url}" alt="${name}">
                 <br>
                 <button class="copy-btn" onclick="copy('${url}')">复制NFC链接</button>
             </div>
