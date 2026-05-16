@@ -3,46 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC碰一碰照片</title>
+    <title>NFC碰一碰 视频/图片相册</title>
     <style>
         body{max-width:1000px;margin:20px auto;padding:0 20px;}
         .box{display:inline-block;margin:10px;border:1px solid #ddd;padding:10px;border-radius:8px;}
-        img{width:200px;height:150px;object-fit:cover;}
+        img, video{width:200px;height:150px;object-fit:cover;}
         button{margin-top:8px;padding:6px 12px;background:#007aff;color:white;border:none;border-radius:6px;cursor:pointer;}
     </style>
 </head>
 <body>
-    <h2>我的NFC照片相册</h2>
+    <h2>我的NFC照片/视频相册</h2>
     <br>
 
-    <div id="imgs"></div>
+    <div id="media"></div>
 
     <script>
         // ======================================
-        // 只需要在这里写你上传的图片文件名
+        // 在这里写你上传的 图片/视频 文件名
+        // 支持：jpg/png/gif/webp / mp4/webm
         // ======================================
-        const images = [
+        const mediaList = [
             "1.jpg",
-            // 想加更多直接往下写，例如：
+            "video1.mp4",
+            // 想加更多直接往下写
             // "2.jpg",
-            // "3.png"
+            // "video2.mp4"
         ];
 
+        const baseUrl = "https://nzm1213456.github.io/Cloud-Photo/images/";
+
         let html = "";
-        images.forEach(name => {
-            // 绝对路径，保证能显示
-            let url = "https://nzm1213456.github.io/Cloud-Photo/images/" + name;
+        mediaList.forEach(name => {
+            let url = baseUrl + name;
+            let tag = "";
+
+            // 判断是图片还是视频
+            if (name.match(/\.(mp4|webm|mov)$/i)) {
+                tag = `<video controls muted><source src="${url}" type="video/mp4">您的浏览器不支持视频播放</video>`;
+            } else {
+                tag = `<img src="${url}" alt="${name}">`;
+            }
             
             html += `
             <div class="box">
-                <img src="${url}">
+                ${tag}
                 <br>
                 <button onclick="copy('${url}')">复制NFC链接</button>
             </div>
             `;
         });
 
-        document.getElementById("imgs").innerHTML = html;
+        document.getElementById("media").innerHTML = html;
 
         // 复制链接
         function copy(url) {
