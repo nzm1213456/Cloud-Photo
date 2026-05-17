@@ -18,27 +18,21 @@
     <div id="media"></div>
 
     <script>
-        // ======================================
-        // 在这里写你上传的 图片/视频 文件名
-        // 支持：jpg/png/gif/webp / mp4/webm
-        // ======================================
+        // 私有仓库图片基础地址 固定不改
+        const privateBase = "https://raw.githubusercontent.com/nzm1213456/photos/main/images/";
+
+        // 只填私有仓库 photos/img 里面的文件名
         const mediaList = [
             "1.jpg"
-            // 想加更多直接往下写
-            // "2.jpg",
-            // "video2.mp4"
         ];
-
-        const baseUrl = "https://nzm1213456.github.io/Cloud-Photo/images/";
 
         let html = "";
         mediaList.forEach(name => {
-            let url = baseUrl + name;
+            let url = privateBase + name;
             let tag = "";
 
-            // 判断是图片还是视频
             if (name.match(/\.(mp4|webm|mov)$/i)) {
-                tag = `<video controls muted><source src="${url}" type="video/mp4">您的浏览器不支持视频播放</video>`;
+                tag = `<video controls muted><source src="${url}" type="video/mp4">加载失败</video>`;
             } else {
                 tag = `<img src="${url}" alt="${name}">`;
             }
@@ -62,7 +56,7 @@
             i.select();
             document.execCommand("copy");
             i.remove();
-            alert("已复制：" + url);
+            alert("已复制NFC可用链接");
         }
     </script>
 </body>
