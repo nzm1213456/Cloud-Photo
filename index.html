@@ -18,34 +18,28 @@
     <div id="media"></div>
 
     <script>
-        // ==============================================
-        // 仓库1：你原来的图片仓库（不动）
-        // ==============================================
+        // ====================== 仓库1（图片）======================
         const repo1 = {
-            base: "https://raw.githubusercontent.com/nzm1213456/photos/main/images",
+            base: "https://raw.githubusercontent.com/nzm1213456/photos/main/images/",
             token: "?token=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",
-            files: [
-                "1.jpg"  // 你原来的图片
-            ]
+            files: ["1.jpg"]
         };
 
-        // ==============================================
-        // 仓库2：你新账号的视频仓库（刚刚那个）
-        // ==============================================
+        // ====================== 仓库2（视频）======================
         const repo2 = {
-            base: "https://raw.githubusercontent.com/cangku-photo/tupian-shiping/main/shipin",
+            base: "https://raw.githubusercontent.com/cangku-photo/tupian-shiping/main/shipin/",
             token: "?token=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",
-            files: [
-                "VID_20230830_131114.mp4"  // 你要加的视频
-            ]
+            files: ["VID_20230830_131114.mp4"]
         };
 
-        // ==============================================
-        // 自动合并加载（不用动）
-        // ==============================================
+        // 拼接路径（自动补全斜杠，修复 90% 加载失败）
+        function getUrl(repo, name) {
+            return repo.base.replace(/\/$/, '') + "/" + name + repo.token;
+        }
+
         let allMedia = [];
-        repo1.files.forEach(f => allMedia.push({ url: repo1.base + f + repo1.token, name: f }));
-        repo2.files.forEach(f => allMedia.push({ url: repo2.base + f + repo2.token, name: f }));
+        repo1.files.forEach(f => allMedia.push({ url: getUrl(repo1, f), name: f }));
+        repo2.files.forEach(f => allMedia.push({ url: getUrl(repo2, f), name: f }));
 
         let html = "";
         allMedia.forEach(item => {
@@ -54,9 +48,9 @@
             let tag = "";
 
             if (name.match(/\.(mp4|webm|mov)$/i)) {
-                tag = `<video controls muted><source src="${url}" type="video/mp4">加载失败</video>`;
+                tag = `<video controls muted playsinline><source src="${url}" type="video/mp4">视频加载失败</video>`;
             } else {
-                tag = `<img src="${url}" alt="${name}">`;
+                tag = `<img src="${url}" alt="${name}" onerror="this.src='https://via.placeholder.com/200x150?text=图片失败'">`;
             }
 
             html += `
@@ -70,15 +64,20 @@
 
         document.getElementById("media").innerHTML = html;
 
-        // 复制链接
-        function copy(url) {
-            let i = document.createElement("input");
-            i.value = url;
-            document.body.appendChild(i);
-            i.select();
-            document.execCommand("copy");
-            i.remove();
-            alert("已复制NFC可用链接");
+        // 复制（新版浏览器兼容）
+        async function copy(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                alert("✅ 复制成功！");
+            } catch (e) {
+                let input = document.createElement("input");
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand("copy");
+                input.remove();
+                alert("✅ 复制成功！");
+            }
         }
     </script>
 </body>
