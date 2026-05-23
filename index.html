@@ -18,7 +18,7 @@
     <div id="media"></div>
 
     <script>
-        // 改用jsDelivr CDN，国内稳定访问
+        // 用jsDelivr，去掉token，路径正确
         const privateBase = "https://cdn.jsdelivr.net/gh/nzm1213456/photos@main/images/";
 
         const mediaList = [
@@ -47,13 +47,13 @@
 
         document.getElementById("media").innerHTML = html;
 
-        // 修复：新版浏览器兼容的复制方法
+        // 新版浏览器复制兼容
         async function copy(url) {
             try {
                 await navigator.clipboard.writeText(url);
                 alert("已复制NFC可用链接");
             } catch (err) {
-                alert("复制失败，请手动复制链接：" + url);
+                alert("复制失败，请手动复制：" + url);
             }
         }
     </script>
