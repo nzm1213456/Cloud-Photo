@@ -18,41 +18,25 @@
     <div id="media"></div>
 
     <script>
-        // ====================== 仓库1（图片）======================
-        const repo1 = {
-            base: "https://raw.githubusercontent.com/nzm1213456/photos/main/images/",
-            token: "?token=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",
-            files: ["1.jpg"]
-        };
+        // 私有仓库图片基础地址 固定不改
+        const privateBase = "https://raw.githubusercontent.com/nzm1213456/photos/main/images?token=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";
 
-        // ====================== 仓库2（视频）======================
-        const repo2 = {
-            base: "https://raw.githubusercontent.com/cangku-photo/tupian-shiping/main/shipin/",
-            token: "?token=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",
-            files: ["VID_20230830_131114.mp4"]
-        };
-
-        // 拼接路径（自动补全斜杠，修复 90% 加载失败）
-        function getUrl(repo, name) {
-            return repo.base.replace(/\/$/, '') + "/" + name + repo.token;
-        }
-
-        let allMedia = [];
-        repo1.files.forEach(f => allMedia.push({ url: getUrl(repo1, f), name: f }));
-        repo2.files.forEach(f => allMedia.push({ url: getUrl(repo2, f), name: f }));
+        // 只填私有仓库 photos/img 里面的文件名
+        const mediaList = [
+            "1.jpg"
+        ];
 
         let html = "";
-        allMedia.forEach(item => {
-            let url = item.url;
-            let name = item.name;
+        mediaList.forEach(name => {
+            let url = privateBase + name;
             let tag = "";
 
             if (name.match(/\.(mp4|webm|mov)$/i)) {
-                tag = `<video controls muted playsinline><source src="${url}" type="video/mp4">视频加载失败</video>`;
+                tag = `<video controls muted><source src="${url}" type="video/mp4">加载失败</video>`;
             } else {
-                tag = `<img src="${url}" alt="${name}" onerror="this.src='https://via.placeholder.com/200x150?text=图片失败'">`;
+                tag = `<img src="${url}" alt="${name}">`;
             }
-
+            
             html += `
             <div class="box">
                 ${tag}
@@ -64,20 +48,15 @@
 
         document.getElementById("media").innerHTML = html;
 
-        // 复制（新版浏览器兼容）
-        async function copy(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                alert("✅ 复制成功！");
-            } catch (e) {
-                let input = document.createElement("input");
-                input.value = text;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand("copy");
-                input.remove();
-                alert("✅ 复制成功！");
-            }
+        // 复制链接
+        function copy(url) {
+            let i = document.createElement("input");
+            i.value = url;
+            document.body.appendChild(i);
+            i.select();
+            document.execCommand("copy");
+            i.remove();
+            alert("已复制NFC可用链接");
         }
     </script>
 </body>
