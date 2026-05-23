@@ -18,10 +18,9 @@
     <div id="media"></div>
 
     <script>
-        // 私有仓库图片基础地址 固定不改
-        const privateBase = "https://raw.githubusercontent.com/nzm1213456/photos/main/images/";
+        // 改用jsDelivr CDN，国内稳定访问
+        const privateBase = "https://cdn.jsdelivr.net/gh/nzm1213456/photos@main/images/";
 
-        // 只填私有仓库 photos/img 里面的文件名
         const mediaList = [
             "1.jpg"
         ];
@@ -48,15 +47,14 @@
 
         document.getElementById("media").innerHTML = html;
 
-        // 复制链接
-        function copy(url) {
-            let i = document.createElement("input");
-            i.value = url;
-            document.body.appendChild(i);
-            i.select();
-            document.execCommand("copy");
-            i.remove();
-            alert("已复制NFC可用链接");
+        // 修复：新版浏览器兼容的复制方法
+        async function copy(url) {
+            try {
+                await navigator.clipboard.writeText(url);
+                alert("已复制NFC可用链接");
+            } catch (err) {
+                alert("复制失败，请手动复制链接：" + url);
+            }
         }
     </script>
 </body>
